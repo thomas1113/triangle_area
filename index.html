@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triangle Area Calculator</title>
+</head>
+<body>
+    <h1>Triangle Area Calculator</h1>
+    <p>Enter the sides of multiple triangles and calculate the one with the maximum area.</p>
+    <div id="triangle-inputs">
+        <div class="triangle">
+            <label for="sideA">Side A:</label>
+            <input type="number" class="sideA" step="0.01">
+            <label for="sideB">Side B:</label>
+            <input type="number" class="sideB" step="0.01">
+            <label for="sideC">Side C:</label>
+            <input type="number" class="sideC" step="0.01">
+        </div>
+    </div>
+    <button onclick="addTriangleInput()">Add Another Triangle</button>
+    <button onclick="calculateMaxArea()">Calculate Max Area</button>
+    <p id="result">Result will be displayed here.</p>
+
+    <script>
+        function addTriangleInput() {
+            const container = document.createElement('div');
+            container.className = 'triangle';
+            container.innerHTML = `
+                <label for="sideA">Side A:</label>
+                <input type="number" class="sideA" step="0.01">
+                <label for="sideB">Side B:</label>
+                <input type="number" class="sideB" step="0.01">
+                <label for="sideC">Side C:</label>
+                <input type="number" class="sideC" step="0.01">
+            `;
+            document.getElementById('triangle-inputs').appendChild(container);
+        }
+
+        function calculateArea(a, b, c) {
+            const s = (a + b + c) / 2;
+            return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+        }
+
+        function calculateMaxArea() {
+            const triangles = document.querySelectorAll('.triangle');
+            let maxArea = 0;
+            let maxSides = [];
+
+            triangles.forEach(triangle => {
+                const a = parseFloat(triangle.querySelector('.sideA').value);
+                const b = parseFloat(triangle.querySelector('.sideB').value);
+                const c = parseFloat(triangle.querySelector('.sideC').value);
+
+                if (a && b && c && a + b > c && a + c > b && b + c > a) {
+                    const area = calculateArea(a, b, c);
+                    if (area > maxArea) {
+                        maxArea = area;
+                        maxSides = [a, b, c];
+                    }
+                }
+            });
+
+            if (maxArea > 0) {
+                document.getElementById('result').textContent = 
+                    `The triangle with the maximum area has sides: ${maxSides.join(", ")} and an area of: ${maxArea.toFixed(2)}`;
+            } else {
+                document.getElementById('result').textContent = "Please enter valid sides for the triangles.";
+            }
+        }
+    </script>
+</body>
+</html>
